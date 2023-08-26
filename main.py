@@ -79,15 +79,13 @@ def handle_read():
         label_tuple = struct.unpack('<hhh',data)
         transformed_data = transform_data(label_tuple)
         one_y.append(transformed_data[0])
-        two_y.append(transformed_data[1])
-        three_y.append(transformed_data[2])
         x_data.append(counter)
         counter+=1
 
 def thread_callback(peripheral,one_y,two_y,three_y,counter,x_data):
     global thread_on
     while thread_on:
-        time.sleep(0.15)
+        time.sleep(0.1)
         handle_read()
 
 def update(i):
@@ -96,8 +94,6 @@ def update(i):
     with lock:
         one_axis.clear()
         one_axis.plot(x_data,one_y)
-        one_axis.plot(x_data,two_y)
-        one_axis.plot(x_data,three_y)
 
 threading.Thread(target=thread_callback,args=[peripheral,one_y,two_y,three_y,counter,x_data]).start()
 animate = FuncAnimation(fig=fig,func=update,init_func=init_function,interval=100)
